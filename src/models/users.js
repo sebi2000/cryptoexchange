@@ -11,9 +11,10 @@ const usersSchema = mongoose.Schema({
   email: String,
   provider: {
     type: String,
-    enum: ["github", "google"],
-    default: "github",
+    enum: ["github", "google", "default"],
+    default: "default",
   },
+  password: String,
   createdAt: { type: Date, default: Date.now },
   lastLogin: { type: Date, default: Date.now },
 });
