@@ -3,19 +3,18 @@ const mongoose = require('mongoose');
 const currencySchema = mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
 
     ratio: {
         type: Number,
-        require: true,
         default: 1
     },
 
     exchangeAmount: {
         type: Number,
-        require: true
+        default: 1,
     }
 });
 

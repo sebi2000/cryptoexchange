@@ -22,7 +22,7 @@ mongoose.connect(
   (e) => {
     console.log("db connection", !e ? "successfull" : e);
     if (!e) {
-      Currency.countDocuments({}, function (err, count) {
+      Currency.countDocuments({}, (err, count) => {
         if (err) console.log(err);
         else {
           if (!count) {
