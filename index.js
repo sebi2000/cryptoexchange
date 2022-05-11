@@ -1,15 +1,16 @@
-var express = require("express");
-var session = require("express-session");
-var passport = require("passport");
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
 require("dotenv").config();
-var gitHubRoutes = require("./routes/githubOAuth.js");
-var googleRoutes = require("./routes/googleOAuth.js");
+const gitHubRoutes = require("./routes/githubOAuth.js");
+const googleRoutes = require("./routes/googleOAuth.js");
 const mongoose = require("mongoose");
 const isAuth = require("./middleware/isAuth.js");
 const constants = require("./constants/values.js");
 const Users = require("./models/users.js");
+const Currency = require("./models/currency.js");
 
-var server = express();
+const server = express();
 
 mongoose.connect(
   process.env.MONGO_DB_CONN_STRING,
@@ -20,6 +21,17 @@ mongoose.connect(
   },
   (e) => {
     console.log("db connection", !e ? "successfull" : e);
+    if (!e) {
+      Currency.countDocuments({}, (err, count) => {
+        if (err) console.log(err);
+        else {
+          if (!count) {
+            createCurrency();
+          }
+        }
+      })
+
+    }
   }
 );
 
@@ -50,3 +62,34 @@ server.use("/api/users/:userId", isAuth, async (req, res) => {
 
 console.log("server at http://localhost:1234/api/");
 server.listen(1234);
+
+// initial seeding
+const createCurrency = async () => {
+  const currencyList = [
+      {
+          name: "xUSD",
+      },
+      {
+          name: "Bitcoin",
+          ratio: 2.5,
+          exchangeAmount: 1000000
+      },
+      {
+          name: "Ethereum",
+          ratio: 2.0,
+          exchangeAmount: 2100000
+      },
+      {
+          name: "Tether",
+          ratio: 2.2,
+          exchangeAmount: 1500000
+      },
+      {
+          name: "BNB",
+          ratio: 1.9,
+          exchangeAmount: 1900000
+      }
+  ]; 
+
+  await Currency.insertMany(currencyList);
+}
