@@ -22,7 +22,7 @@ async function isAuth(req, res, next) {
           userId: req.session.passport.user.id,
           email: req.session.passport.user.emails[0].value,
         });
-      case "default":
+      default:
         authorizeCondition = await Users.findOne({
           id: req.session.passport.user.id,
           email: req.session.passport.user.email,

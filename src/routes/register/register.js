@@ -21,13 +21,13 @@ server.post('/register', async (req, res) =>{
     if(!foundUser) {
         await Users.create({...user}).then(user =>
             res.status(200).json({
-            message: "User successfully created",
-            user,
+                message: "User successfully created",
+                user,
             })
         )
     } else {
         res.status(401).json({
-          message: "User not created",
+            message: "User not created",
         });
     }
 });

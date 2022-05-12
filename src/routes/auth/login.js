@@ -1,5 +1,4 @@
 const express = require("express")
-const res = require("express/lib/response")
 const passport = require("passport")
 const LocalStrategy = require('passport-local')
 const Users = require("../../models/users")
@@ -15,7 +14,7 @@ passport.use(
       if (!user) { return done(null, false); }
       
       const valid = await passManager.comparePassword(password, user.password).then(resp => resp)
-      
+
       if(valid){
         await Users.updateOne(user, { lastLogin: new Date() })
         done(null, user)
@@ -40,4 +39,4 @@ server.post('/auth/login', passport.authenticate('local', {
   res.redirect(`/api/users/${req.session.passport.user.id}`)
 })
 
-module.exports = server;
+module.exports = server
