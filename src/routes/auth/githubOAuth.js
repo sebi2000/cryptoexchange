@@ -1,8 +1,8 @@
 var express = require("express");
 var passport = require("passport");
 var GitHubStrategy = require("passport-github2").Strategy;
-const constants = require("../constants/values.js");
-const Users = require("../models/users.js");
+const constants = require("../../constants/values.js");
+const Users = require("../../models/users.js");
 
 var server = express();
 
@@ -55,7 +55,7 @@ server.get(
     } else {
       await Users.updateOne(filter, { lastLogin: new Date() });
     }
-    res.redirect(`/api/users/${req.user.id}`);
+    res.redirect(`/api/users/${qRes.id}`);
   }
 );
 

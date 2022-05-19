@@ -3,17 +3,20 @@ const mongoose = require("mongoose");
 const usersSchema = mongoose.Schema({
   userId: {
     type: String,
+    required: true,
   },
   displayName: {
     type: String,
+    required: true,
   },
   username: String,
   email: String,
   provider: {
     type: String,
-    enum: ["github", "google"],
-    default: "github",
+    enum: ["github", "google", "default"],
+    default: "default",
   },
+  password: String,
   createdAt: { type: Date, default: Date.now },
   lastLogin: { type: Date, default: Date.now },
 });
