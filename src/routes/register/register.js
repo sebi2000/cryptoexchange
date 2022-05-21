@@ -1,9 +1,11 @@
 const express = require("express")
 const Users = require("../../models/users")
 const Wallet = require("../../models/wallet")
+const Currency = require('../../models/currency')
 const passManager = require('../../services/passwordManager')
-const server = express();
-server.use(express.json());
+const { initialAmount } = require('../../constants/values')
+const server = express()
+server.use(express.json())
 
 server.post('/register', async (req, res) =>{
 
@@ -21,11 +23,21 @@ server.post('/register', async (req, res) =>{
 
     if(!foundUser) {
         try{
-            await Users.create(user)
-            await Wallet.create({ userId: user._id })
+            const xUSD = await Currency.findOne({ 'name': 'xUSD' })
+            const userCreated = await Users.create(user)
+            const wallet = await Wallet.create({ 
+                userId: userCreated._id,
+                currency: [
+                    {
+                        currencyId: xUSD._id,
+                        amount: initialAmount
+                    }
+                ]
+            })
             res.status(200).json({
                 message: "User successfully created",
-                user,
+                user: userCreated,
+                wallet
             })
         }
         catch(err) {
