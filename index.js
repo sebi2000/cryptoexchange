@@ -11,6 +11,7 @@ const Users = require("./src/models/users.js");
 const Currency = require("./src/models/currency.js");
 const registerRoutes = require('./src/routes/register/register.js')
 const loginRoutes = require('./src/routes/auth/login.js')
+const cryptoRoutes = require('./src/routes/crypto/crypto')
 
 const server = express();
 
@@ -53,6 +54,7 @@ server.use(googleRoutes)
 server.use(gitHubRoutes)
 server.use(registerRoutes)
 server.use(loginRoutes)
+server.use(cryptoRoutes)
 
 server.get(constants.UNAUTHORIZED_URL, (req, res) => {
   res.status(401).send("Unauthorized, please login");
