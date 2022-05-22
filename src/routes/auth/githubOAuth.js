@@ -3,6 +3,7 @@ var passport = require("passport");
 var GitHubStrategy = require("passport-github2").Strategy;
 const constants = require("../../constants/values.js");
 const Users = require("../../models/users.js");
+const createWallet = require('../../utils/createWallet')
 
 var server = express();
 
@@ -49,13 +50,8 @@ server.get(
       displayName,
       provider,
     };
-    const qRes = await Users.findOne(filter);
-    if (!qRes) {
-      await Users.create(entry);
-    } else {
-      await Users.updateOne(filter, { lastLogin: new Date() });
-    }
-    res.redirect(`/api/users/${qRes.id}`);
+    const qRes = await Users.findOne(filter)
+    await createWallet(qRes, entry, res)
   }
 );
 

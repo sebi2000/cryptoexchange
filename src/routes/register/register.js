@@ -1,8 +1,9 @@
 const express = require("express")
-const Users = require("../../models/users")
 const passManager = require('../../services/passwordManager')
-const server = express();
-server.use(express.json());
+const createWallet = require("../../utils/createWallet")
+const Users = require("../../models/users")
+const server = express()
+server.use(express.json())
 
 server.post('/register', async (req, res) =>{
 
@@ -16,20 +17,9 @@ server.post('/register', async (req, res) =>{
         password: encryptedPassword,
     }
 
-    const foundUser = await Users.findOne({ username });
-
-    if(!foundUser) {
-        await Users.create({...user}).then(user =>
-            res.status(200).json({
-                message: "User successfully created",
-                user,
-            })
-        )
-    } else {
-        res.status(401).json({
-            message: "User not created",
-        });
-    }
+    const foundUser = await Users.findOne({ username })
+    await createWallet(foundUser, user, res)
+   
 });
 
 module.exports = server
