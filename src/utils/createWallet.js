@@ -4,7 +4,6 @@ const Currency = require('../models/currency')
 const { initialAmount } = require('../constants/values')
 
 const createWallet = async (foundUser, user, res) => {
-    console.log("foundUser: ", foundUser)
     if(!foundUser) {
         try{
             const xUSD = await Currency.findOne({ 'name': 'xUSD' })
