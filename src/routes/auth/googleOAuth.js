@@ -3,9 +3,7 @@ var passport = require("passport");
 var GoogleStrategy = require("passport-google-oauth20").Strategy;
 const constants = require("../../constants/values.js");
 const Users = require("../../models/users.js");
-const Currency = require('../../models/currency')
-const Wallet = require('../../models/wallet')
-const { initialAmount } = require('../../constants/values')
+const createWallet = require('../../utils/createWallet')
 
 var server = express();
 
@@ -60,31 +58,7 @@ server.get(
       provider: "google",
     };
     const qRes = await Users.findOne(filter);
-    if (!qRes) {
-      try{
-        const xUSD = await Currency.findOne({ 'name': 'xUSD' })
-        const userCreated = await Users.create(entry)
-        const wallet = await Wallet.create({ 
-          userId: userCreated._id,
-          currency: [
-              {
-                  currencyId: xUSD._id,
-                  amount: initialAmount
-              }
-          ]
-        })
-        res.status(200).json({
-            message: "User successfully created",
-            user: userCreated,
-            wallet
-        })
-      }
-      catch(err) {
-        res.status(400).json({ err })
-      }
-    } else {
-      await Users.updateOne(filter, { lastLogin: new Date() })
-    }
+    await createWallet(qRes, entry, res)
   }
 );
 
