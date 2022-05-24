@@ -16,12 +16,22 @@ const transactionSchema = mongoose.Schema({
         ref: 'Currency'
     },
 
-    baseAmount: {
+    soldAmount: {
         type: Number,
         required: true
     },
 
-    exchangeAmount: {
+    boughAmount: {
+        type: Number,
+        required: true
+    },
+
+    cryptoInWallet: {
+        type: Number,
+        required: true
+    },
+
+    currencyInWallet: {
         type: Number,
         required: true
     },
