@@ -12,6 +12,7 @@ const Currency = require("./src/models/currency.js");
 const registerRoutes = require('./src/routes/register/register.js')
 const loginRoutes = require('./src/routes/auth/login.js')
 const cryptoRoutes = require('./src/routes/crypto/crypto')
+const profileRoutes = require('./src/routes/profile/profile')
 const walletRoutes = require('./src/routes/crypto/wallet')
 
 const server = express();
@@ -56,6 +57,7 @@ server.use(gitHubRoutes)
 server.use(registerRoutes)
 server.use(loginRoutes)
 server.use(cryptoRoutes)
+server.use(profileRoutes)
 server.use(walletRoutes)
 
 server.get(constants.UNAUTHORIZED_URL, (req, res) => {
