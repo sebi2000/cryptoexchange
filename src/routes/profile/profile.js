@@ -3,6 +3,19 @@ const server = express();
 const Users = require('../../models/users');
 const isAuth = require('../../middleware/isAuth');
 const passwordManager = require('../../services/passwordManager');
+const multer  = require('multer')
+const fs = require('fs')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './src/uploads')
+    },
+    filename: (req, file, cb) => {
+        const index = file.originalname.lastIndexOf('.')
+        const extension = file.originalname.slice(index + 1)
+        cb(null,  req.session.passport.user._id + '.' + extension)
+    }
+})
+const upload = multer({ storage: storage })
 
 server.post('/profile/change-password', isAuth, async (req, res) => {
     const user = await Users.findById({ _id: req.session.passport.user._id });
@@ -25,6 +38,25 @@ server.post('/profile/change-password', isAuth, async (req, res) => {
     }
     return res.status(402).json({
         msg: "Wrong password"
+    })
+})
+
+server.put('/profile/avatar', 
+    isAuth,
+    (req, res, next) => {
+    //middleware to delete the existing avatar of the user
+    const files = fs.readdirSync('./src/uploads')
+    files.forEach(file => {
+        if (file.includes(req.session.passport.user._id))
+            fs.unlinkSync(`./src/uploads/${file}`)
+    })
+    next()
+    }, 
+    upload.single('file'),
+    (req, res) => {
+    res.status(200).json({
+        msg: 'Avatar uploaded successfully!',
+        file: req.file
     })
 })
 
