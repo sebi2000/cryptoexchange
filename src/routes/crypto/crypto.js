@@ -21,7 +21,7 @@ server.get('/crypto', isAuth, async (req, res) => {
 server.get('/crypto-sell', isAuth, async (req, res) => {
   const user = req.session.passport.user;
   const wallet = await Wallet.findOne({ userId: user._id });
-  
+
   if (!wallet) {
     return res.status(404).json({
       msg: 'Wallet not found'
@@ -35,10 +35,10 @@ server.get('/crypto-sell', isAuth, async (req, res) => {
       toSell.push({ name: currency.name, amount: c.amount, price: currency.ratio * c.amount })
     }
   }
-  
+
   return res.status(200).json(
     toSell
-    )
-  })
+  )
+})
 
-  module.exports = server
+module.exports = server
