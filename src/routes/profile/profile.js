@@ -64,8 +64,7 @@ server.put('/profile/avatar',
 server.get('/profile/avatar', isAuth, async (req, res) => {
     await fs.readdir('./src/uploads', (err, files) => {
         if(err) {
-            console.log(err)
-            res.status(400).json({
+            return res.status(400).json({
                 msg: `Error encountered: ${err}`
             })
     }
@@ -77,8 +76,7 @@ server.get('/profile/avatar', isAuth, async (req, res) => {
             foundFile = true
             await res.sendFile(file, { root: './src/uploads' }, (err) => {
                 if (err) {
-                    console.log(err)
-                    res.status(400).json({
+                    return res.status(400).json({
                         msg: `Error encountered: ${err}`
                     })
                 } 
