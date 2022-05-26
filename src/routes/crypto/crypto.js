@@ -8,14 +8,13 @@ server.get('/crypto', isAuth, async (req, res) => {
   const availableCrypto = await Currency.find();
 
   if (!availableCrypto) {
-    res.status(404).json({
+    return res.status(404).json({
       message: "No crypto available",
     })
-  } else {
-    res.status(200).json({
-      availableCrypto,
-    })
   }
+  return res.status(200).json({
+    availableCrypto,
+  })
 })
 
 server.get('/crypto-sell', isAuth, async (req, res) => {
