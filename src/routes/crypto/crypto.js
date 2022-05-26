@@ -3,6 +3,7 @@ const server = express()
 const Currency = require('../../models/currency')
 const isAuth = require('../../middleware/isAuth')
 const Wallet = require('../../models/wallet')
+const CurrencyHistory = require('../../models/currencyHistory')
 
 server.get('/crypto', isAuth, async (req, res) => {
   const availableCrypto = await Currency.find();
@@ -38,6 +39,22 @@ server.get('/crypto-sell', isAuth, async (req, res) => {
   return res.status(200).json(
     toSell
   )
+})
+
+server.get('/currency-history', isAuth, async (req, res) => {
+  const { name } = req.body;
+  const currency = await Currency.findOne({ name: name });
+  const history = await CurrencyHistory.findOne(currency._id);
+
+  if (!history || !currency) {
+    return res.status(404).json({
+      msg: 'Currency not found'
+    })
+  }
+
+  return res.status(200).json({
+    ratio: history.ratio
+  });
 })
 
 module.exports = server
