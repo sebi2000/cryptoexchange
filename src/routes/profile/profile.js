@@ -5,6 +5,7 @@ const isAuth = require('../../middleware/isAuth');
 const passwordManager = require('../../services/passwordManager');
 const multer  = require('multer')
 const fs = require('fs')
+const path = require('path')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './src/uploads')
@@ -58,6 +59,37 @@ server.put('/profile/avatar',
         msg: 'Avatar uploaded successfully!',
         file: req.file
     })
+})
+
+server.get('/profile/avatar', isAuth, async (req, res) => {
+    await fs.readdir('./src/uploads', (err, files) => {
+        if(err) {
+            return res.status(400).json({
+                msg: `Error encountered: ${err}`
+            })
+    }
+
+    let foundFile = false
+
+    files.forEach(async file => {
+        if (file.includes(req.session.passport.user._id)){
+            foundFile = true
+            await res.sendFile(file, { root: './src/uploads' }, (err) => {
+                if (err) {
+                    return res.status(400).json({
+                        msg: `Error encountered: ${err}`
+                    })
+                } 
+            })
+        }
+    })
+
+    if(foundFile === false)
+        res.status(404).json({
+            msg: 'No avatar',
+        })
+})
+          
 })
 
 module.exports = server;
