@@ -52,10 +52,13 @@ server.use(
 // persistent login sessions (recommended).
 server.use(passport.initialize())
 server.use(passport.session())
-server.use(cors())
-
-server.use(googleRoutes)
+server.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
+}))
 server.use(gitHubRoutes)
+server.use(googleRoutes)
 server.use(registerRoutes)
 server.use(loginRoutes)
 server.use(cryptoRoutes)
@@ -67,8 +70,7 @@ server.get(constants.UNAUTHORIZED_URL, (req, res) => {
 });
 
 server.use("/api/users/:id", isAuth, async (req, res) => {
-  console.log(req.session.passport);
-  const dbUser = await Users.findOne({ _id: req.params.id});
+  const dbUser = await Users.findById(req.params.id);
   if (dbUser) {
     return res.send(dbUser);
   }

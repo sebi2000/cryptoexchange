@@ -37,9 +37,6 @@ server.post('/auth/login', passport.authenticate('local', {
 }), 
   (req, res) => {
   res.redirect(`/api/users/${req.session.passport.user.id}`)
-  // res.status(200).json({
-  //   msg: 'Username found'
-  // })
 })
 
 module.exports = server
