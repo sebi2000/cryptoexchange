@@ -14,6 +14,7 @@ const loginRoutes = require('./src/routes/auth/login.js')
 const cryptoRoutes = require('./src/routes/crypto/crypto')
 const profileRoutes = require('./src/routes/profile/profile')
 const walletRoutes = require('./src/routes/crypto/wallet')
+const transactionRoutes = require('./src/routes/transaction/transaction')
 
 const server = express();
 
@@ -59,6 +60,7 @@ server.use(loginRoutes)
 server.use(cryptoRoutes)
 server.use(profileRoutes)
 server.use(walletRoutes)
+server.use(transactionRoutes)
 
 server.get(constants.UNAUTHORIZED_URL, (req, res) => {
   res.status(401).send("Unauthorized, please login");
