@@ -75,9 +75,36 @@ server.post('/transaction', isAuth, async (req, res) => {
     
     let cryptoInWallet
     if(baseCurrency._id.toString() !== xUSD._id.toString())
+    {
         cryptoInWallet = wallet.currency[baseCurrencyIndex].amount - amount
-    else cryptoInWallet = wallet.currency[exchangeCurrencyIndex].amount + boughtCurrencyAmount
+        //update ratio
+        await Currency.findByIdAndUpdate(
+            baseCurrency._id,
+            {
+                $set: { ratio: Math.random(0, 1)},
+            }
+        )
 
+        if(exchangeCurrency._id.toString() !== xUSD._id.toString())
+            //update ratio
+            await Currency.findByIdAndUpdate(
+                exchangeCurrency._id,
+                {
+                    $set: { ratio: Math.random(0, 1)},
+                }
+        )
+            
+    }  
+    else {
+        cryptoInWallet = wallet.currency[exchangeCurrencyIndex].amount + boughtCurrencyAmount
+        //update ratio
+        await Currency.findByIdAndUpdate(
+            exchangeCurrency._id,
+            {
+                $set: { ratio: Math.random(0, 1)},
+            }
+        )
+    }
     let currencyInWallet = await Wallet.findOne({ userId: req.session.passport.user._id })
 
     const transaction = await Transaction.create({
