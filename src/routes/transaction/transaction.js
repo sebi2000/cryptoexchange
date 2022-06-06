@@ -125,4 +125,33 @@ server.post('/transaction', isAuth, async (req, res) => {
     
 })
 
+const response = []
+
+const pushTransaction = async (transaction) => {
+    let baseCurrency = await Currency.findById(transaction.baseId)
+    let exchangeCurrency = await Currency.findById(transaction.exchangeId)
+    
+    const { soldAmount, boughAmount, cryptoInWallet, currencyInWallet, transactionDate } = transaction
+    response.push({
+        baseCurrencyName: baseCurrency.name,
+        exchangeCurrencyName: exchangeCurrency.name,
+        soldAmount,
+        boughAmount,
+        cryptoInWallet,
+        currencyInWallet,
+        transactionDate
+    })
+}
+
+server.get('/transaction-history', isAuth, async (req, res) => {
+    const transactions = await Transaction.find({ userId: req.session.passport.user._id })
+    for (const transaction of transactions) {
+        await pushTransaction(transaction)
+    }
+    return res.status(200).json({
+        message: "Transactions were successfully retrieved",
+        response
+    })
+})
+
 module.exports = server
