@@ -118,7 +118,7 @@ server.post('/transaction', isAuth, async (req, res) => {
         transactionDate: new Date()
     })
 
-    res.status(200).send({
+    return res.status(200).send({
         message: "Successful transaction",
         transaction
     })
