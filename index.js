@@ -67,7 +67,6 @@ server.get(constants.UNAUTHORIZED_URL, (req, res) => {
 });
 
 server.use("/api/users/:id", isAuth, async (req, res) => {
-  console.log(req.session.passport);
   const dbUser = await Users.findOne({ _id: req.params.id});
   if (dbUser) {
     return res.send(dbUser);
