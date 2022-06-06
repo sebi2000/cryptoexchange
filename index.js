@@ -13,8 +13,8 @@ const registerRoutes = require('./src/routes/register/register.js')
 const loginRoutes = require('./src/routes/auth/login.js')
 const cryptoRoutes = require('./src/routes/crypto/crypto')
 const profileRoutes = require('./src/routes/profile/profile')
-const walletRoutes = require('./src/routes/crypto/wallet')
 const transactionRoutes = require('./src/routes/transaction/transaction')
+const cors = require('cors')
 
 const server = express();
 
@@ -52,9 +52,13 @@ server.use(
 // persistent login sessions (recommended).
 server.use(passport.initialize())
 server.use(passport.session())
-
-server.use(googleRoutes)
+server.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
+}))
 server.use(gitHubRoutes)
+server.use(googleRoutes)
 server.use(registerRoutes)
 server.use(loginRoutes)
 server.use(cryptoRoutes)
@@ -67,7 +71,7 @@ server.get(constants.UNAUTHORIZED_URL, (req, res) => {
 });
 
 server.use("/api/users/:id", isAuth, async (req, res) => {
-  const dbUser = await Users.findOne({ _id: req.params.id});
+  const dbUser = await Users.findById(req.params.id);
   if (dbUser) {
     return res.send(dbUser);
   }
