@@ -13,8 +13,16 @@ server.get('/crypto', isAuth, async (req, res) => {
       message: "No crypto available",
     })
   }
+
+  const toBuy = []
+  for (const c of availableCrypto) {
+    if (c.name !== 'xUSD') {
+      toBuy.push(c)
+    }
+  }
+
   return res.status(200).json({
-    availableCrypto,
+    toBuy,
   })
 })
 
@@ -32,13 +40,13 @@ server.get('/crypto-sell', isAuth, async (req, res) => {
   for (const c of wallet.currency) {
     const currency = await Currency.findById(c.currencyId);
     if (currency.name !== 'xUSD') {
-      toSell.push({ name: currency.name, amount: c.amount, price: currency.ratio * c.amount })
+      toSell.push({ _id: currency._id, name: currency.name, amount: c.amount, price: currency.ratio * c.amount })
     }
   }
 
-  return res.status(200).json(
-    toSell
-  )
+  return res.status(200).json({
+    toSell,
+  })
 })
 
 server.get('/currency-history', isAuth, async (req, res) => {

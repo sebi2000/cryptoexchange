@@ -33,6 +33,10 @@ passport.use(
   )
 );
 
+server.get('/auth/github1', (req, res) => {
+  res.redirect('/auth/github')
+})
+
 server.get(
   "/auth/github",
   passport.authenticate("github", { scope: ["user:email"] })
