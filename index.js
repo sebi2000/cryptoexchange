@@ -83,30 +83,40 @@ server.listen(1234);
 // initial seeding
 const createCurrency = async () => {
   const currencyList = [
-      {
-          name: "xUSD",
-      },
-      {
-          name: "Bitcoin",
-          ratio: 2.5,
-          exchangeAmount: 1000000
-      },
-      {
-          name: "Ethereum",
-          ratio: 2.0,
-          exchangeAmount: 2100000
-      },
-      {
-          name: "Tether",
-          ratio: 2.2,
-          exchangeAmount: 1500000
-      },
-      {
-          name: "BNB",
-          ratio: 1.9,
-          exchangeAmount: 1900000
-      }
-  ]; 
+    {
+      name: "xUSD",
+    },
+    {
+      name: "Bitcoin (BTC)",
+      ratio: 2.5,
+      exchangeAmount: 1000000
+    },
+    {
+      name: "Ethereum (ETH)",
+      ratio: 2.0,
+      exchangeAmount: 2100000
+    },
+    {
+      name: "Tether (USDT)",
+      ratio: 2.2,
+      exchangeAmount: 1500000
+    },
+    {
+      name: "BNB (BNB)",
+      ratio: 1.9,
+      exchangeAmount: 1900000
+    },
+    {
+      name: "USD Coin (USDC)",
+      ratio: 0.99,
+      exchangeAmount: 1200000
+    },
+    {
+      name: "XRP (XRP)",
+      ratio: 0.7,
+      exchangeAmount: 2000000
+    }
+  ];
 
   await Currency.insertMany(currencyList);
 }
