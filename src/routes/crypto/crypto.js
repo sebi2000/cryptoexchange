@@ -5,7 +5,7 @@ const isAuth = require('../../middleware/isAuth')
 const Wallet = require('../../models/wallet')
 const CurrencyHistory = require('../../models/currencyHistory')
 
-server.get('/crypto', async (req, res) => {
+server.get('/crypto', isAuth, async (req, res) => {
   const availableCrypto = await Currency.find();
 
   if (!availableCrypto) {
@@ -26,7 +26,7 @@ server.get('/crypto', async (req, res) => {
   })
 })
 
-server.get('/crypto-sell', async (req, res) => {
+server.get('/crypto-sell', isAuth, async (req, res) => {
   const user = req.session.passport.user;
   const wallet = await Wallet.findOne({ userId: user._id });
 
