@@ -79,6 +79,13 @@ server.use("/api/users/:id", isAuth, async (req, res) => {
   return res.redirect(constants.UNAUTHORIZED_URL);
 });
 
+server.get('/logout', async (req, res) => {
+  await req.session.destroy()
+  res
+    .status(200)
+    .json({ success: true, message: "User logged out successfully" });
+})
+
 console.log("server at http://localhost:1234/api/");
 server.listen(1234);
 
@@ -89,32 +96,32 @@ const createCurrency = async () => {
       name: "xUSD",
     },
     {
-      name: "Bitcoin (BTC)",
+      name: "Bitcoin",
       ratio: 2.5,
       exchangeAmount: 1000000
     },
     {
-      name: "Ethereum (ETH)",
+      name: "Ethereum",
       ratio: 2.0,
       exchangeAmount: 2100000
     },
     {
-      name: "Tether (USDT)",
+      name: "Tether",
       ratio: 2.2,
       exchangeAmount: 1500000
     },
     {
-      name: "BNB (BNB)",
+      name: "BNB",
       ratio: 1.9,
       exchangeAmount: 1900000
     },
     {
-      name: "USD Coin (USDC)",
+      name: "USD Coin",
       ratio: 0.99,
       exchangeAmount: 1200000
     },
     {
-      name: "XRP (XRP)",
+      name: "XRP",
       ratio: 0.7,
       exchangeAmount: 2000000
     }
