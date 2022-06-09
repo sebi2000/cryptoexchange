@@ -132,14 +132,14 @@ const pushTransaction = async (transaction) => {
     let exchangeCurrency = await Currency.findById(transaction.exchangeId)
     
     const { soldAmount, boughAmount, cryptoInWallet, currencyInWallet, transactionDate } = transaction
+    console.log(transactionDate.toLocaleDateString('en-US') + transactionDate.toLocaleTimeString('en-US'));
     response.push({
-        baseCurrencyName: baseCurrency.name,
-        exchangeCurrencyName: exchangeCurrency.name,
-        soldAmount,
-        boughAmount,
+        _id: transaction._id,
+        sold: `${soldAmount} ${baseCurrency.name}`,
+        bought: `${boughAmount} ${exchangeCurrency.name}`,
         cryptoInWallet,
         currencyInWallet,
-        transactionDate
+        transactionDate: `${transactionDate.toLocaleDateString('en-UK')} ${transactionDate.toLocaleTimeString('en-US')}`,
     })
 }
 
