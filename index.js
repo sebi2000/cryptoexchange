@@ -15,7 +15,8 @@ const cryptoRoutes = require('./src/routes/crypto/crypto')
 const profileRoutes = require('./src/routes/profile/profile')
 const transactionRoutes = require('./src/routes/transaction/transaction')
 const walletRoutes = require('./src/routes/crypto/wallet')
-const cors = require('cors')
+const cors = require('cors');
+const CurrencyHistory = require("./src/models/currencyHistory.js");
 
 const server = express();
 
@@ -127,5 +128,12 @@ const createCurrency = async () => {
     }
   ];
 
-  await Currency.insertMany(currencyList);
+  const currencies = await Currency.insertMany(currencyList);
+  currencies.forEach(async currency => {
+    if (currency.name !== 'xUSD')
+      await CurrencyHistory.create({
+        currencyId: currency._id,
+        ratio: currency.ratio,
+      })
+  })
 }
